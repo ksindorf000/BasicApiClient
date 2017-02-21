@@ -53,9 +53,7 @@
   <ItemGroup>
     <Compile Include="Models\Games.cs" />
     <Compile Include="Models\Items.cs" />
-    <Compile Include="Models\Moves.cs" />
     <Compile Include="Models\Pokemon.cs" />
-    <Compile Include="Models\Species.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

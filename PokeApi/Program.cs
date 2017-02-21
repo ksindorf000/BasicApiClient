@@ -1,4 +1,5 @@
-﻿using PokeApi.Models;
+﻿using Newtonsoft.Json;
+using PokeApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace PokeApi
         static void Main(string[] args)
         {
             SetUpClient();
-            int selection = Menu();            
+            int selection = Menu();
         }
 
         /*******************************
@@ -61,43 +62,42 @@ namespace PokeApi
                 Console.Clear();
 
                 string uInput = WriteRead(
-                    "Would you like to: \n"
+                    "What would you like to do: \n"
                     + "1) Look at a Pokemon's Details, \n"
                     + "2) Look at a list of all Pokemon, \n"
                     + "3) Look at a Game's Details, \n"
                     + "4) Look at a list of Games, \n"
                     + "5) Look at an Item's Details, \n"
                     + "6) Look at a list of Items? \n"
+                    + "7) EXIT \n"
                     );
 
                 switch (uInput)
                 {
-                    case "1":
+                    case "1": //Single Pokemon
                         GetSinglePokemon();
-                        valid = true;
                         break;
-                    case "2":
+                    case "2": //List Pokemon
                         CatchEmAll();
-                        valid = true;
                         break;
-                    case "3":
-                        valid = true;
+                    case "3": //Single Game
+                        GetSingleGame();
                         break;
-                    case "4":
-                        valid = true;
+                    case "4": //List Games
+                        GetGamesList();
                         break;
                     case "5":
-                        valid = true;
                         break;
                     case "6":
-                        valid = true;
+                        break;
+                    case "7":
+                        Menu();
                         break;
                     default:
                         WriteRead("You missed! Get another PokeBall and try again.");
                         valid = false;
                         break;
                 }
-                
             }
 
             return selection;
@@ -110,18 +110,27 @@ namespace PokeApi
         {
             Console.WriteLine("Which Pokemon would you like to see Details for?");
             string pId = Console.ReadLine();
+            List<string> movesList = new List<string>();
 
             var response = client.GetAsync($"pokemon/{pId}").Result;
-            var pokemonInst = response.Content.ReadAsAsync<Pokemon>().Result;
+            Pokemon pokemonInst = response.Content.ReadAsAsync<Pokemon>().Result;
 
-            WriteRead(
-                  "\n NAME: " + pokemonInst.Name
-                + "\n BASE EXP: "  + pokemonInst.Base_Experience
-                + "\n HEIGHT: " + pokemonInst.Height
-                + "\n WEIGHT: " + pokemonInst.Weight
-                + "\n ORDER: " + pokemonInst.Order
-                + "\n DEFAULT: " + pokemonInst.Is_Default
+            Console.WriteLine(
+                  "\n NAME: " + pokemonInst.name
+                + "\n BASE EXP: " + pokemonInst.base_experience
+                + "\n HEIGHT: " + pokemonInst.height
+                + "\n WEIGHT: " + pokemonInst.weight
+                + "\n ORDER: " + pokemonInst.order
+                + "\n DEFAULT: " + pokemonInst.is_default
+                + "\n MOVES: "
                 );
+
+            foreach(var move in pokemonInst.moves)
+            {
+                Console.WriteLine($"\t {move.move.name}");
+            }
+
+            Console.ReadLine();
 
             Menu();
         }
@@ -141,7 +150,7 @@ namespace PokeApi
 
                 foreach (var pokemon in catchEmAll.Results)
                 {
-                    Console.WriteLine(pokemon.Name.ToUpper());
+                    Console.WriteLine(pokemon.name.ToUpper());
                 }
 
                 var pageMovement = WriteRead(
@@ -168,6 +177,48 @@ namespace PokeApi
                         break;
                 }
             }
+        }
+
+
+        /***********************************
+         * GetSingleGame()
+         *  Prints single Game detail 
+         ***********************************/
+        private static void GetSingleGame()
+        {            
+            Console.WriteLine("Which Game/Generation would you like to see Details for?");
+            string gId = Console.ReadLine();
+
+            var response = client.GetAsync($"generation/{gId}").Result;
+            Game gameInst = response.Content.ReadAsAsync<Game>().Result;
+
+            Console.WriteLine(gameInst.name);
+
+            string JSON = JsonConvert.SerializeObject(gameInst);
+            Game obj = JsonConvert.DeserializeObject<Game>(JSON);
+
+            foreach (Name name in obj.names)
+            {
+                Console.WriteLine($"{name.name} : {name.language.name}");
+            }
+
+            Console.ReadLine();
+
+        }
+
+        /***********************************
+         * GetGamesList()
+         *  Prints list of games 
+         ***********************************/
+        private static void GetGamesList()
+        {
+            var allGames = client.GetAsync("generation").Result;
+            //GameCollection gameList = allGames.Content.ReadAsAsync<GameCollection>().Result;
+
+            //foreach (var game in gameList.Results)
+            //{
+            //    Console.WriteLine(game.Name);
+            //}
         }
 
         /*******************************
