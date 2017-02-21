@@ -15,7 +15,7 @@ namespace PokeApi.Models
         public string name { get; set; }
         public int weight { get; set; }
         public List<Move> moves { get; set; }
-        public Sprites sprites { get; set; }
+        public pSprites sprites { get; set; }
         public List<object> held_items { get; set; }
         public string location_area_encounters { get; set; }
         public int height { get; set; }
@@ -23,9 +23,9 @@ namespace PokeApi.Models
         public pSpecies species { get; set; }
         public int id { get; set; }
         public int order { get; set; }
-        public List<GameIndice> game_indices { get; set; }
+        public List<pGameIndice> game_indices { get; set; }
         public int base_experience { get; set; }
-        public List<Type> types { get; set; }
+        public List<pType> types { get; set; }
     }
 
     class PokemonCollection
@@ -112,7 +112,7 @@ namespace PokeApi.Models
     {
         public MoveLearnMethod move_learn_method { get; set; }
         public int level_learned_at { get; set; }
-        public VersionGroup version_group { get; set; }
+        public gVersionGroup version_group { get; set; }
     }
 
     public class Move2
@@ -127,7 +127,7 @@ namespace PokeApi.Models
         public Move2 move { get; set; }
     }
 
-    public class Sprites
+    public class pSprites
     {
         public object back_female { get; set; }
         public object back_shiny_female { get; set; }
@@ -151,22 +151,21 @@ namespace PokeApi.Models
         public string name { get; set; }
     }
 
-    public class GameIndice
+    public class pGameIndice
     {
         public Version version { get; set; }
         public int game_index { get; set; }
     }
 
-    public class Type2
+    public class pType2
     {
         public string url { get; set; }
         public string name { get; set; }
     }
 
-    public class Type
+    public class pType
     {
         public int slot { get; set; }
-        public Type2 type { get; set; }
+        public pType2 type { get; set; }
     }
-
 }

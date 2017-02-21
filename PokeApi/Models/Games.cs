@@ -12,22 +12,22 @@ namespace PokeApi.Models
      * http://json2csharp.com/ 
      *********************************/
 
-    public class VersionGroup
+    public class gVersionGroup
     {
         public string url { get; set; }
         public string name { get; set; }
     }
 
-    public class Language
+    public class gLanguage
     {
         public string url { get; set; }
         public string name { get; set; }
     }
 
-    public class Name
+    public class gName
     {
         public string name { get; set; }
-        public Language language { get; set; }
+        public gLanguage language { get; set; }
     }
 
     public class PokemonSpecy
@@ -58,15 +58,28 @@ namespace PokeApi.Models
     {
         public List<object> abilities { get; set; }
         public string name { get; set; }
-        public List<VersionGroup> version_groups { get; set; }
+        public List<gVersionGroup> version_groups { get; set; }
         public int id { get; set; }
-        public List<Name> names { get; set; }
+        public List<gName> names { get; set; }
         public List<PokemonSpecy> pokemon_species { get; set; }
         public List<gMove> moves { get; set; }
         public MainRegion main_region { get; set; }
         public List<gType> types { get; set; }
     }
 
+    public class GameCollection
+    {
+        public int count { get; set; }
+        public object previous { get; set; }
+        public List<Game> results { get; set; }
+        public object next { get; set; }
 
+        private GameCollection GetGames(HttpClient client, Uri page)
+        {
+            string pageNumber = page.Query;
+            var allPokemonResp = client.GetAsync($"generation/{pageNumber}").Result;
+            return allPokemonResp.Content.ReadAsAsync<GameCollection>().Result;
+        }
+    }
 
 }

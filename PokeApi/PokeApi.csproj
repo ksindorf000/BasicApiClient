@@ -51,8 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Extras.cs" />
+    <Compile Include="Helpers\GameHelp.cs" />
+    <Compile Include="Helpers\ItemHelp.cs" />
+    <Compile Include="Helpers\PokemonHelp.cs" />
     <Compile Include="Models\Games.cs" />
-    <Compile Include="Models\Items.cs" />
+    <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Pokemon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
