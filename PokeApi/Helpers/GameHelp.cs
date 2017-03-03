@@ -47,10 +47,13 @@ namespace PokeApi.Helpers
             var allGames = client.GetAsync("generation").Result;
             GameCollection gameList = allGames.Content.ReadAsAsync<GameCollection>().Result;
 
+            Console.WriteLine("\nGAMES/GENERATIONS: \n");
             foreach (var game in gameList.results)
             {
                 Console.WriteLine(game.name);
             }
+
+            Console.ReadLine();
         }
     }
 }
